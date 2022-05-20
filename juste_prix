@@ -78,6 +78,9 @@ def play_game():
         message = "Tu as deviné le juste prix après {} essais !".format(RETRIES)
         guess_button.configure(state='disabled')
         message += "\n" + "Cliques sur Jouer pour lancer une nouvelle partie."
+        list_under[:] = []
+        list_over[:] = []
+        price_list[:] = []
 
     update_result(message)
 
@@ -98,7 +101,7 @@ play_button = Button(window, text="Jouer", font=("Arial", 14, "bold"), fg="Black
 guess_button = Button(window, text="Deviner", font=("Arial", 13), state='disabled', fg="#13d675", bg="Black",
                       command=play_game)
 
-# Exit Button
+# Exit Button0
 exit_button = Button(window, text="Quitter", font=("Arial", 14), fg="White", bg="#b82741", command=exit)
 
 # Entry Fields
