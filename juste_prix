@@ -1,0 +1,122 @@
+from tkinter import *
+from random import randint
+
+# Create a new window
+window = Tk()
+
+# Set the dimensions of the created window
+window.geometry("600x400")
+
+# Set the background color of the window
+window.config(bg="#2F7D71")
+window.resizable(width=False, height=False)
+window.iconbitmap("JP.ico")
+
+# Set Window Title
+window.title('Bienvenue au Juste Prix !')
+
+# The code for the buttons and text and other
+# interactive UI elements go here
+
+price_list = []
+
+TARGET = randint(0, 1000)
+RETRIES = 0
+
+
+def update_result(text):
+    result.configure(text=text)
+
+
+# Create a new game
+def new_game():
+    guess_button.config(state='normal')
+    global TARGET, RETRIES
+    TARGET = randint(0, 1000)
+    RETRIES = 0
+    update_result(text="Devinez un prix entre\n 1 and 1000 !")
+
+
+# Continue the ongoing game or end it
+def play_game():
+    global RETRIES, max_list_under, min_list_over
+
+    choice = int(number_form.get())
+    price_list.append(choice)
+    list_under = [x for x in price_list if x < TARGET]
+    list_over = [x for x in price_list if x > TARGET]
+    list_under.append(0)
+    list_over.append(1000)
+    print(list_under)
+    print(list_over)
+    if RETRIES == 0:
+        pass
+    else:
+        min_list_over = min(list_over)
+        max_list_under = max(list_under)
+        print(price_list)
+        print("Le min de la liste est {}".format(max_list_under))
+        print("Le max de la liste est {}".format(min_list_over))
+
+    if choice != TARGET:
+        RETRIES += 1
+
+        message = ""
+        if TARGET < choice:
+            if RETRIES == 1:
+                hint = "Le juste prix se trouve entre 0 et {}".format(choice)
+            else:
+                hint = "Le juste prix se trouve entre {} et {}".format(max_list_under, choice)
+        else:
+            if RETRIES == 1:
+                hint = "Le juste prix se trouve entre {} et 1000".format(choice)
+            else:
+                hint = "Le juste prix se trouve entre {} et {}".format(choice, min_list_over)
+        message += "\n\nIndice :\n" + hint
+
+    else:
+        message = "Tu as deviné le juste prix après {} essais !".format(RETRIES)
+        guess_button.configure(state='disabled')
+        message += "\n" + "Cliques sur Jouer pour lancer une nouvelle partie."
+
+    update_result(message)
+
+
+# Heading of our game
+title = Label(window, text="Le Juste Prix !", font=("Arial", 24), fg="#fffcbd", bg="#2F7D71")
+
+# Result and hints of our game
+result = Label(window, text="Cliques sur Jouer pour lancer une nouvelle partie !",
+               font=("Arial", 12, "normal", "italic"),
+               fg="White", bg="#2F7D71", justify=LEFT)
+
+# Play Button
+play_button = Button(window, text="Jouer", font=("Arial", 14, "bold"), fg="Black", bg="#29c70a",
+                     command=new_game)
+
+# Guess Button
+guess_button = Button(window, text="Deviner", font=("Arial", 13), state='disabled', fg="#13d675", bg="Black",
+                      command=play_game)
+
+# Exit Button
+exit_button = Button(window, text="Quitter", font=("Arial", 14), fg="White", bg="#b82741", command=exit)
+
+# Entry Fields
+guessed_number = StringVar()
+number_form = Entry(window, font=("Arial", 11), textvariable=guessed_number)
+
+# Place the labels
+
+title.place(x=170, y=50)
+result.place(x=180, y=210)
+
+# Place the buttons
+exit_button.place(x=300, y=320)
+guess_button.place(x=350, y=147)
+play_button.place(x=170, y=320)
+
+# Place the entry field
+number_form.place(x=180, y=150)
+
+# Start the window
+window.mainloop()
